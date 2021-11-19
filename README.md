@@ -71,7 +71,7 @@ Semnificatie prioritati
         P2 - importanta medie
         P3 - importanta scazuta
 
-Studenti
+Studenti - grupa 1080
 
     Baltatu Maria-Andreea
     Bulaceanu Alexandra-Irina
