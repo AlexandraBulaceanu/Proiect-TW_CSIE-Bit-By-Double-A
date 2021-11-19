@@ -1,27 +1,32 @@
 # Proiect-TW_CSIE-Bit-By-Double-A
 
-Aplicație web pentru partajarea experiențelor utilizării mijloacelor de transport
+# Aplicație web pentru partajarea experiențelor utilizării mijloacelor de transport
 
 Obiectiv
+        
     Realizarea unei aplicații web prin care utilizatorii pot împărtăși experiența din urma utilizării unuia din mijloacele de transport în comun.
 
 Descriere
+    
     Aplicația trebuie să permită crearea unui cont prin care utilizatorul poate să partajeze o experiență, după ce a folosit un mijloc de transport în comun. Pentru utilizatorii anonimi, aplicația va permite căutarea și vizualizarea intrărilor în platforma.
 
 Tehnologii utilizate
+
     Backend: Node.js + REST API
     Frontend: React.js
     Database: MySQL
     ORM: Sequelize
 
 Functionalitati - Must Have
+        
     General
+    
         P1: Creare sectiune de home - Front
         P1: Creare sectiune de autentificare: 2 optiuni (utilizatori anonimi sau utilizatori cu cont) - Front
         P1: Creare sectiune pentru partajarea experientei in mijlocul de transport - Front
         P1: Creare formular pentru editarea experientei + adaugarea ei + stergerea
         P1: Creare sectiune pentru cautare (search bar) - Front 
-
+        
     Modulul Utilizator
         P1: Creare cont utilizator pe baza unor câmpuri sau cu ajutorul unui API extern (GMAIL, Facebook, Linkedin) - Back + Database
         P2: Modificarea sau dezactivarea contului - Back + Database
@@ -47,6 +52,7 @@ Functionalitati - Must Have
 
 
 Functionalitati - Nice to have
+   
     General
         P3: Creare sectiune de semnalizare evenimente - Front
 
@@ -56,16 +62,20 @@ Functionalitati - Nice to have
         P3: evenimente produse pe o anumita ruta intr-un anumit interval de timp (de ex intarzieri, blocaje, accidente etc) - Back + Database
 
 Teste - optional
+   
     Test coverage
 
 Semnificatie prioritati
-    P1 - importanta majora
-    P2 - importanta medie
-    P3 - importanta scazuta
+
+        P1 - importanta majora
+        P2 - importanta medie
+        P3 - importanta scazuta
 
 Studenti
+
     Baltatu Maria-Andreea
     Bulaceanu Alexandra-Irina
 
 Profesor Coordonator
+
     Toma Andrei
