@@ -79,3 +79,9 @@ Studenti - grupa 1080
 Profesor Coordonator
 
     Toma Andrei
+    
+Instructiuni rulare
+    npm install
+    npx sequelize-cli migrate
+    npx sequelize-cli:all
+    npm start
