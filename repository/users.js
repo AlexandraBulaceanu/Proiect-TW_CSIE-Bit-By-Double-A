@@ -65,7 +65,7 @@ module.exports.updateUser = async (args, context) => {
 	}
 };
 
-module.exports.deleteLocation = async (args) => {
+module.exports.deleteUser = async (args) => {
 	const { id } = args;
 	try {
 		const userToDelete = await db.User.findOne({
@@ -75,7 +75,7 @@ module.exports.deleteLocation = async (args) => {
 		});
 		if (userToDelete == null) {
 			return {
-				status: "no location with said id",
+				status: "no user with said id",
 			};
 		}
 		userToDelete.destroy();
