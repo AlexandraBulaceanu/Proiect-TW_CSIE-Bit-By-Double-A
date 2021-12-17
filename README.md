@@ -81,7 +81,8 @@ Profesor Coordonator
     Toma Andrei
     
 Instructiuni rulare
-    npm install
-    npx sequelize-cli migrate
-    npx sequelize-cli:all
-    npm start
+
+        npm install
+        npx sequelize-cli migrate
+        npx sequelize-cli seed:all
+        npm start
