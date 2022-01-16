@@ -82,7 +82,15 @@ Profesor Coordonator
     
 Instructiuni rulare
 
+Prima faza proiect
+        
         npm install
         npx sequelize-cli migrate
         npx sequelize-cli seed:all
         npm start
+Dupa refactor
+        
+        npm start run - backend
+        npm start - frontend
+        
+        
