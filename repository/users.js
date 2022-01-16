@@ -16,18 +16,23 @@ module.exports.getUserById = async (id) => {
 };
 
 module.exports.createUser = async (args) => {
+	console.log("look i am here")
 	const { email, name } = args;
-
+    console.log("in createUser")
+	console.log(email)
+	console.log(name)
 	const password = crypto
 		.createHash("sha256")
 		.update(args.password)
 		.digest("hex");
+	console.log(password)
 	try {
 		const newUser = await db.User.create({
 			email,
 			password,
 			name,
 		});
+		console.log(newUser)
 
 		return newUser;
 	} catch (error) {
@@ -37,23 +42,20 @@ module.exports.createUser = async (args) => {
 };
 
 // Updated User
-module.exports.updateUser = async (args, context) => {
-	const { user } = context;
+module.exports.updateUser = async (id, args) => {
 
-	if (!user) {
-		return null;
-	}
-
-	const { id } = user;
-
-	const { email, firstName, lastName } = args;
+	const { email, name } = args;
+	const password = crypto
+		.createHash("sha256")
+		.update(args.password)
+		.digest("hex");
 
 	try {
 		await db.User.update(
 			{
 				email,
-				firstName,
-				lastName,
+				name,
+				password
 			},
 			{ where: { id } }
 		);
@@ -65,8 +67,8 @@ module.exports.updateUser = async (args, context) => {
 	}
 };
 
-module.exports.deleteUser = async (args) => {
-	const { id } = args;
+module.exports.deleteUser = async (id) => {
+	//const { id } = args;
 	try {
 		const userToDelete = await db.User.findOne({
 			where: {
@@ -78,6 +80,7 @@ module.exports.deleteUser = async (args) => {
 				status: "no user with said id",
 			};
 		}
+		await db.sequelize.query("SET FOREIGN_KEY_CHECKS=0");
 		userToDelete.destroy();
 		return { status: "success" };
 	} catch (err) {

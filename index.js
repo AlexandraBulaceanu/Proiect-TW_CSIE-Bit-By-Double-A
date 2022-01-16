@@ -4,7 +4,6 @@ dotenv.config();
 
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const uuidv1 = require('uuid/v1');
 const fs = require("fs");
 
 const port = process.env.PORT;
@@ -24,7 +23,9 @@ app.use(cors());
 
 
 //REST for Reviews
-app.post("/reviews", (req, res) => {
+
+//Post
+app.post("/reviews", async (req, res) => {
 	try {
 	if (req.body === undefined || (Object.keys(req.body ).length === 0 && Object.getPrototypeOf(req.body ) === Object.prototype))
     {
@@ -36,7 +37,7 @@ app.post("/reviews", (req, res) => {
       res.status(400).json({message:"malformed request"})
     }
 	else {
-		function_response = createReview(req.body)
+		function_response = await createReview(req.body)
 		if (function_response === null)
 			res.status(400).send()
 		else
@@ -47,22 +48,23 @@ app.post("/reviews", (req, res) => {
 	  }
 });
 
-
-app.get("/reviews", (req, res) => {
+//Get ALL
+app.get("/reviews", async (req, res) => {
 	try{
-		const reviewsList = getAllReviews();
-		res.json(reviewsList);
+		const reviewsList = await getAllReviews();
+		console.log(reviewsList);
+		res.status(200).json(reviewsList);
 	} catch (err) {
 			console.warn(err.stack)
 			res.status(500).json({ message: 'server error' })
 		  }
 });
 
-
-app.get("/reviews/:id", (req, res) => {
+//Get one by ID
+app.get("/reviews/:id", async (req, res) => {
 	try{
 		const id = req.params.id;
-		const review = getReview(id);
+		const review = await getReview(id);
 	
 		if (review !== null) {
 			res.json(review);
@@ -74,11 +76,11 @@ app.get("/reviews/:id", (req, res) => {
 	}
 });
 
-
-app.put("/reviews/:id", (req, res) => {
+//Update one by ID
+app.put("/reviews/:id", async (req, res) => {
 	try{
 		let id = req.params.id;
-		let reviewToUpdate = updateReview(id); //TO BE ADDED
+		let reviewToUpdate = await updateReview(id, req.body);
 		
 		if (reviewToUpdate !== null) {
 		res.json(reviewToUpdate);
@@ -90,10 +92,11 @@ app.put("/reviews/:id", (req, res) => {
 	}
   });
 
-app.delete("/reviews/:id", (req, res) => {
+//Delete one by ID
+app.delete("/reviews/:id", async (req, res) => {
 	try{
 		const id = req.params.id;
-		const reviewToDelete = deleteReview(id);
+		const reviewToDelete = await deleteReview(id);
 
 		if (reviewToDelete.status === "success") {
 			res.status(200).send(`review ${id} was removed`);
@@ -105,33 +108,41 @@ app.delete("/reviews/:id", (req, res) => {
 	}
   });
 
+
 //REST for Users
-app.post("/users", (req, res) => {
+
+//Post
+app.post("/users", async (req, res) => {
+	console.log("in post")
 	try {
 	if (req.body === undefined || (Object.keys(req.body ).length === 0 && Object.getPrototypeOf(req.body ) === Object.prototype))
     {
+		console.log("in post 1")
       res.status(400).json({message:"body is missing"})
     } 
 	else if(!req.body.hasOwnProperty('email') || !req.body.hasOwnProperty('name'))
     {
+		console.log("in post 2")
       res.status(400).json({message:"malformed request"})
     }
 	else {
-		function_response = createUser(req.body)
+		console.log("in post 3")
+		function_response = await createUser(req.body)
 		if (function_response === null)
 			res.status(400).send()
 		else
-			res.status(200).send()
+			res.status(200).send({message: "created"})
 	} } catch (err) {
 		console.warn(err.stack)
 		res.status(500).json({ message: 'server error' })
 	  }
 });
 
-
-app.get("/users", (req, res) => {
+//Get for all
+app.get("/users", async (req, res) => {
 	try{
-		const usersList = getAllUsers();
+		const usersList = await getAllUsers();
+		console.log(usersList)
 		res.json(usersList);
 	} catch (err) {
 			console.warn(err.stack)
@@ -139,11 +150,11 @@ app.get("/users", (req, res) => {
 		  }
 });
 
-
-app.get("/users/:id", (req, res) => {
+//get one by id
+app.get("/users/:id", async (req, res) => {
 	try{
 		const id = req.params.id;
-		const user = getUserById(id);
+		const user = await getUserById(id);
 	
 		if (user !== null) {
 			res.json(user);
@@ -155,11 +166,11 @@ app.get("/users/:id", (req, res) => {
 	}
 });
 
-
-app.put("/users/:id", (req, res) => {
+//update one by id
+app.put("/users/:id", async (req, res) => {
 	try{
 		let id = req.params.id;
-		let userToUpdate = updateUser(id);
+		let userToUpdate = await updateUser(id, req.body);
 		
 		if (userToUpdate !== null) {
 		res.json(userToUpdate);
@@ -171,11 +182,11 @@ app.put("/users/:id", (req, res) => {
 	}
 });
 
-
-app.delete("/users/:id", (req, res) => {
+//delete one by id
+app.delete("/users/:id", async (req, res) => {
 	try{
 		const id = req.params.id;
-		const userToDelete = deleteUser(id);
+		const userToDelete = await deleteUser(id);
 
 		if (userToDelete.status === "success") {
 			res.status(200).send(`user ${id} was removed`);
@@ -187,8 +198,11 @@ app.delete("/users/:id", (req, res) => {
 	}
 });
 
+
 //REST for Companies
-app.post("/companies", (req, res) => {
+
+//post
+app.post("/companies", async (req, res) => {
 	try {
 	if (req.body === undefined || (Object.keys(req.body ).length === 0 && Object.getPrototypeOf(req.body ) === Object.prototype))
     {
@@ -199,7 +213,7 @@ app.post("/companies", (req, res) => {
       res.status(400).json({message:"malformed request"})
     }
 	else {
-		function_response = createCompany(req.body)
+		function_response = await createCompany(req.body)
 		if (function_response === null)
 			res.status(400).send()
 		else
@@ -210,9 +224,11 @@ app.post("/companies", (req, res) => {
 	  }
 });
 
-app.get("/companies", (req, res) => {
+//get all
+app.get("/companies", async (req, res) => {
 	try{
-		const companiesList = getAllCompanies();
+		const companiesList = await getAllCompanies();
+		console.log(companiesList)
 		res.json(companiesList);
 	} catch (err) {
 			console.warn(err.stack)
@@ -220,11 +236,11 @@ app.get("/companies", (req, res) => {
 		  }
 });
 
-
-app.get("/companies/:id", (req, res) => {
+//get one by id
+app.get("/companies/:id", async (req, res) => {
 	try{
 		const id = req.params.id;
-		const company = getCompany(id);
+		const company = await getCompany(id);
 	
 		if (company !== null) {
 			res.json(company);
@@ -236,10 +252,11 @@ app.get("/companies/:id", (req, res) => {
 	}
 });
 
-app.put("/companies/:id", (req, res) => {
+//update one by id
+app.put("/companies/:id", async (req, res) => {
 	try{
 		let id = req.params.id;
-		let companyToUpdate = updateCompany(id); 
+		let companyToUpdate = await updateCompany(id, req.body); 
 		
 		if (companyToUpdate !== null) {
 		res.json(companyToUpdate);
@@ -251,10 +268,11 @@ app.put("/companies/:id", (req, res) => {
 	}
   });
 
-app.delete("/companies/:id", (req, res) => {
+//delete one by id
+app.delete("/companies/:id", async (req, res) => {
 	try{
 		const id = req.params.id;
-		const companyToDelete = deleteCompany(id);
+		const companyToDelete = await deleteCompany(id);
 
 		if (companyToDelete.status === "success") {
 			res.status(200).send(`company ${id} was removed`);
@@ -267,20 +285,21 @@ app.delete("/companies/:id", (req, res) => {
   });
 
 
-  //REST for locations
+//REST for locations
 
-  app.post("/locations", (req, res) => {
+//post 
+app.post("/locations", async (req, res) => {
 	try {
 	if (req.body === undefined || (Object.keys(req.body ).length === 0 && Object.getPrototypeOf(req.body ) === Object.prototype))
-    {
-      res.status(400).json({message:"body is missing"})
-    } 
+	{
+		res.status(400).json({message:"body is missing"})
+	} 
 	else if(!req.body.hasOwnProperty('address'))
-    {
-      res.status(400).json({message:"malformed request"})
-    }
+	{
+		res.status(400).json({message:"malformed request"})
+	}
 	else {
-		function_response = createLocation(req.body)
+		function_response = await createLocation(req.body)
 		if (function_response === null)
 			res.status(400).send()
 		else
@@ -288,12 +307,13 @@ app.delete("/companies/:id", (req, res) => {
 	} } catch (err) {
 		console.warn(err.stack)
 		res.status(500).json({ message: 'server error' })
-	  }
+		}
 });
 
-app.get("/locations", (req, res) => {
+//get all
+app.get("/locations", async (req, res) => {
 	try{
-		const locationsList = getAllLocations();
+		const locationsList = await getAllLocations();
 		res.json(locationsList);
 	} catch (err) {
 			console.warn(err.stack)
@@ -301,11 +321,11 @@ app.get("/locations", (req, res) => {
 		  }
 });
 
-
-app.get("/locations/:id", (req, res) => {
+//get one by id
+app.get("/locations/:id", async (req, res) => {
 	try{
 		const id = req.params.id;
-		const location = getLocation(id);
+		const location = await getLocation(id);
 	
 		if (location !== null) {
 			res.json(location);
@@ -317,10 +337,11 @@ app.get("/locations/:id", (req, res) => {
 	}
 });
 
-app.put("/locations/:id", (req, res) => {
+//update one by id
+app.put("/locations/:id", async (req, res) => {
 	try{
 		let id = req.params.id;
-		let locationToUpdate = updateLocation(id); 
+		let locationToUpdate = await updateLocation(id, req.body); 
 		
 		if (locationToUpdate !== null) {
 		res.json(locationToUpdate);
@@ -332,10 +353,11 @@ app.put("/locations/:id", (req, res) => {
 	}
   });
 
-app.delete("/locations/:id", (req, res) => {
+//detele one by id
+app.delete("/locations/:id", async (req, res) => {
 	try{
 		const id = req.params.id;
-		const locationToDelete = deleteLocation(id);
+		const locationToDelete = await deleteLocation(id);
 
 		if (locationToDelete.status === "success") {
 			res.status(200).send(`location ${id} was removed`);
@@ -350,7 +372,8 @@ app.delete("/locations/:id", (req, res) => {
 
 //REST for routes
 
-app.post("/routes", (req, res) => {
+//post
+app.post("/routes", async (req, res) => {
 	try {
 	if (req.body === undefined || (Object.keys(req.body ).length === 0 && Object.getPrototypeOf(req.body ) === Object.prototype))
     {
@@ -361,7 +384,7 @@ app.post("/routes", (req, res) => {
       res.status(400).json({message:"malformed request"})
     }
 	else {
-		function_response = createRoute(req.body)
+		function_response = await createRoute(req.body)
 		if (function_response === null)
 			res.status(400).send()
 		else
@@ -372,9 +395,10 @@ app.post("/routes", (req, res) => {
 	  }
 });
 
-app.get("/routes", (req, res) => {
+//get all
+app.get("/routes", async (req, res) => {
 	try{
-		const routesList = getAllRoutes();
+		const routesList = await getAllRoutes();
 		res.json(routesList);
 	} catch (err) {
 			console.warn(err.stack)
@@ -382,11 +406,11 @@ app.get("/routes", (req, res) => {
 		  }
 });
 
-
-app.get("/routes/:id", (req, res) => {
+//get one by id
+app.get("/routes/:id", async (req, res) => {
 	try{
 		const id = req.params.id;
-		const route = getRoute(id);
+		const route = await getRoute(id);
 	
 		if (route !== null) {
 			res.json(route);
@@ -398,10 +422,11 @@ app.get("/routes/:id", (req, res) => {
 	}
 });
 
-app.put("/routes/:id", (req, res) => {
+//update by id
+app.put("/routes/:id", async (req, res) => {
 	try{
 		let id = req.params.id;
-		let routeToUpdate = updateRoute(id); 
+		let routeToUpdate = await updateRoute(id, req.body); 
 		
 		if (routeToUpdate !== null) {
 		res.json(routeToUpdate);
@@ -413,10 +438,11 @@ app.put("/routes/:id", (req, res) => {
 	}
   });
 
-app.delete("/routes/:id", (req, res) => {
+//delete by id
+app.delete("/routes/:id", async (req, res) => {
 	try{
 		const id = req.params.id;
-		const routeToDelete = deleteRoute(id);
+		const routeToDelete = await deleteRoute(id);
 
 		if (routeToDelete.status === "success") {
 			res.status(200).send(`route ${id} was removed`);

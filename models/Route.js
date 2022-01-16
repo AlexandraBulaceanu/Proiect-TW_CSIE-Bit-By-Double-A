@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
 			Route.belongsTo(models.Company, { foreignKey: "companyId" });
 			Route.belongsToMany(models.User, {
 				through: models.Review,
-				foreignKey: "reviewId",
+				foreignKey: "id",
 			});
 		}
 	}
@@ -22,7 +22,7 @@ module.exports = (sequelize) => {
 				primaryKey: true,
 			},
 			wayOfTransport: {
-				type: DataTypes.STRING, //is actually an enum, will document possible values bcs mysql is retarded and doesn't have enum
+				type: DataTypes.STRING, 
 				allowNull: false,
 			},
 		},
