@@ -142,3 +142,17 @@ module.exports.getRoute = async (id) => {
 		return null;
 	}
 };
+
+
+module.exports.getAllCompanysRoutes = async (companyId) =>{
+	try{
+		const routes = await db.Route.findAll({where: {companyId : companyId} })
+		const routesArr = await getAllRoutesData(routes)
+	
+		return routesArr
+	}
+	catch (err){
+		console.error(err)
+		return null
+	}
+}

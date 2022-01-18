@@ -208,3 +208,40 @@ module.exports.getReview = async (id) => {
 		return null;
 	}
 };
+
+module.exports.getAllReviewsByUser = async (userId) => {
+	try { 
+		const reviews = await db.Review.findAll({ where: { userId: userId }})
+		const reviewsArr = await getAllReviewsAttributes(reviews)
+		
+		return reviewsArr;
+	}
+	catch(err){
+		console.error(err)
+		return null
+	}
+}
+
+module.exports.getAllReviewsForCompany = async (companyId) => {
+	try{
+		const allReviews = await db.Review.findAll()
+		const filteredReviews = []
+
+		for (let review of allReviews){
+			const route = await db.Route.findOne({
+				where: { id: review.dataValues.routeId,
+						 companyId : companyId },
+			});
+			if (route !== null){
+				filteredReviews.push(review)
+			}
+		}
+		const reviewsArr = await getAllReviewsAttributes(filteredReviews);
+
+		return reviewsArr	
+	}
+	catch(err){
+		console.error(err)
+		return null;
+	}
+}
