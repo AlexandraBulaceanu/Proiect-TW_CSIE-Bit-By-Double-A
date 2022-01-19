@@ -118,6 +118,48 @@ module.exports.getAllRoutes = async () => {
 	}
 };
 
+module.exports.getAllRoutesWithFilters = async () => {
+	try {
+		const routes = await db.Route.findAll();
+
+		const routesArr = [];
+		if (routes.length) {
+			for (let route of routes) {
+				console.log(route)
+				try{
+				const departure = await db.Location.findOne({
+					where: { id: route.dataValues.departureId },
+				});
+				const destination = await db.Location.findOne({
+					where: { id: route.dataValues.destinationId },
+				});
+				
+				const company = await db.Company.findOne({
+					where: { id: route.dataValues.companyId },
+				});
+				
+				
+				routesArr.push({
+					wayOfTransport: route.dataValues.wayOfTransport,
+					id: route.dataValues.id,
+					destination: destination.dataValues,
+					departure: departure.dataValues,
+					company: company.dataValues,
+				});
+
+				} catch(err) {
+					console.log(err)
+				}
+			}
+		}
+		return routesArr;
+	} catch (err) {
+		console.error(err);
+		return null;
+	}
+};
+
+
 module.exports.getRoute = async (id) => {
 	try {
 		const route = await db.Route.findOne({ where: { id } });

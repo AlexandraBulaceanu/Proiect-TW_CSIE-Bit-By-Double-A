@@ -1,7 +1,11 @@
 const { DataTypes, Model, Sequelize } = require("sequelize");
 
 module.exports = (sequelize) => {
-	class Review extends Model {}
+	class Review extends Model {
+		static associate(models) {
+			Review.belongsTo(models.Route, { foreignKey: "routeId" });
+		}
+	}
 
 	Review.init(
 		{

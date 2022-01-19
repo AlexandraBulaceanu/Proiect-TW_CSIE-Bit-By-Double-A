@@ -10,7 +10,7 @@ const port = process.env.PORT;
 
 //sequelize
 const db = require("./models/index.js");
-const { getReview, deleteReview, createReview, updateReview, getAllReviews } = require("./repository/Reviews.js");
+const { getReview, deleteReview, createReview, updateReview, getAllReviews, getAllReviewsByUser, getAllReviewsForLocation, getAllReviewsForCompany } = require("./repository/Reviews.js");
 const { getUserById, deleteUser, createUser, updateUser, getAllUsers } = require("./repository/users.js");
 const { getCompany, deleteCompany, createCompany, updateCompany, getAllCompanies } = require("./repository/companies.js");
 const { getRoute, deleteRoute, createRoute, updateRoute, getAllRoutes } = require("./repository/routes.js");
@@ -61,7 +61,7 @@ app.get("/reviews", async (req, res) => {
 });
 
 //Get one by ID
-app.get("/reviews/:id", async (req, res) => {
+/*app.get("/reviews/:id", async (req, res) => {
 	try{
 		const id = req.params.id;
 		const review = await getReview(id);
@@ -74,7 +74,23 @@ app.get("/reviews/:id", async (req, res) => {
 		console.warn(err.stack)
 		res.status(500).json({ message: 'server error' })
 	}
+});*/
+
+app.get("/reviews/:id", async (req, res) => {
+	try{
+		const id = req.params.id;
+		const review = await getAllReviewsByUser(id);
+	
+		if (review !== null) {
+			res.json(review);
+		} else { 
+			res.status(404).send(`review ${id} was not found`);
+	} } catch(err) {
+		console.warn(err.stack)
+		res.status(500).json({ message: 'server error' })
+	}
 });
+
 
 //Update one by ID
 app.put("/reviews/:id", async (req, res) => {
@@ -108,6 +124,38 @@ app.delete("/reviews/:id", async (req, res) => {
 	}
   });
 
+
+app.get("/reviewsbylocation/:id", async (req, res) => {
+	try{
+		const id = req.params.id;
+		const reviewsByLoc = await getAllReviewsForLocation(id);
+		if (reviewsByLoc !== null) {
+			res.json(reviewsByLoc);
+		} else { 
+			res.status(404).send(`location ${id} was not found`);
+	} } catch(err) {
+		console.warn(err.stack)
+		res.status(500).json({ message: 'server error' })
+	}
+
+	}
+);
+
+app.get("/reviewsbycompany/:id", async (req, res) => {
+	try{
+		const id = req.params.id;
+		const reviewsByComp = await getAllReviewsForCompany(id);
+		if (reviewsByComp !== null) {
+			res.json(reviewsByComp);
+		} else { 
+			res.status(404).send(`company ${id} was not found`);
+	} } catch(err) {
+		console.warn(err.stack)
+		res.status(500).json({ message: 'server error' })
+	}
+
+	}
+);
 
 //REST for Users
 

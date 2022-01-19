@@ -6,6 +6,7 @@ module.exports = (sequelize) => {
 			Route.belongsTo(models.Location, { foreignKey: "destinationId" });
 			Route.belongsTo(models.Location, { foreignKey: "departureId" });
 			Route.belongsTo(models.Company, { foreignKey: "companyId" });
+			Route.hasMany(models.Review, { foreignKey: "routeId" });
 			Route.belongsToMany(models.User, {
 				through: models.Review,
 				foreignKey: "id",

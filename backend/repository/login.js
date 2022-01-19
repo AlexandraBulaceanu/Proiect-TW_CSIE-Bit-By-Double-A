@@ -1,5 +1,3 @@
-const jwt = require("jsonwebtoken");
-const { KEY } = require("../config/jwt");
 const db = require("../models");
 const crypto = require("crypto");
 
