@@ -85,8 +85,8 @@ Instructiuni rulare
 Prima faza proiect
         
         npm install
-        npx sequelize-cli migrate
-        npx sequelize-cli seed:all
+        npx sequelize-cli bd:migrate
+        npx sequelize-cli bd:seed:all
         npm start
 Dupa refactor
         
