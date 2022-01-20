@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react'
+import {reviews} from "./index";
 
-const SERVER='http://localhost:3000'
+const SERVER='http://localhost:3001'
 
 function ReviewList() {
     const [reviews, setReviews] = useState([])
